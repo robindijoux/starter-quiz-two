@@ -1,8 +1,8 @@
 <div class="card">
     <span>Theme:
       <br>
-      <i *ngIf="quiz.theme==='Sport'" class="fas fa-football-ball"></i>
-      <i *ngIf="quiz.theme==='Actor'" class="fas fa-film"></i>
+      <i *ngIf="quiz.theme!== undefined && quiz.theme==='Sport'" class="fas fa-football-ball"></i>
+      <i *ngIf="quiz.theme!== undefined && quiz.theme==='Actor'" class="fas fa-film"></i>
       {{quiz.theme}}
     </span>
   <br>

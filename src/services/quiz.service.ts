@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import { Quiz } from '../models/quiz.model';
 import { QUIZ_LIST } from '../mocks/quiz-list.mock';
 import {HttpClient} from '@angular/common/http';
@@ -20,7 +20,7 @@ export class QuizService {
   // private quizzes: Quiz[] = QUIZ_LIST;
   private quizzes: Quiz[];
 
-  private NEXT_ID = 0;
+  private NEXT_ID = 1;
 
   /**
    * The URL to join
@@ -37,7 +37,7 @@ export class QuizService {
     this.getQuizzes();
   }
 
-  getQuizzes(){
+  getQuizzes(): void{
     this.http.get<Quiz[]>(this.url).subscribe((quizList) => {
       this.quizzes = quizList;
       for (const quiz of this.quizzes){
@@ -47,14 +47,18 @@ export class QuizService {
     });
   }
 
-  addQuiz(quiz: Quiz) {
+  getQuiz(id: number): Observable<Quiz> {
+    return of(this.quizzes.find(quiz => quiz.id === id));
+  }
+
+  addQuiz(quiz: Quiz): void {
     quiz.creationDate = Date();
     quiz.id = this.NEXT_ID++;
     this.quizzes.push(quiz);
     this.quizzes$.next(this.quizzes);
   }
 
-  deleteQuiz(quiz: Quiz){
+  deleteQuiz(quiz: Quiz): void{
     const index: number = this.quizzes.indexOf(quiz);
     if (index !== -1){
       this.quizzes.splice(index, 1); // supprime 1 élément à la position pos
